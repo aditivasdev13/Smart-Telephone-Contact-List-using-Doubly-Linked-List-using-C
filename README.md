@@ -1,0 +1,2 @@
+# Smart-Telephone-Contact-List-using-Doubly-Linked-List-using-C
+This is a console-based contact management application developed in C using a Doubly Linked List. It allows users to add, delete, update, search, and display contacts efficiently. The project supports both forward and backward traversal and includes partial name search functionality, making it more advanced than basic array-based implementations.
