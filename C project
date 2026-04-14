@@ -1,0 +1,160 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Contact {
+    char name[50];
+    char phone[15];
+    struct Contact* next;
+    struct Contact* prev;
+};
+
+struct Contact* head = NULL;
+struct Contact* tail = NULL;
+
+// Add Contact
+void addContact() {
+    struct Contact* newNode = (struct Contact*)malloc(sizeof(struct Contact));
+
+    printf("Enter Name: ");
+    scanf("%s", newNode->name);
+
+    printf("Enter Phone: ");
+    scanf("%s", newNode->phone);
+
+    newNode->next = NULL;
+    newNode->prev = NULL;
+
+    if (head == NULL) {
+        head = tail = newNode;
+    } else {
+        tail->next = newNode;
+        newNode->prev = tail;
+        tail = newNode;
+    }
+
+    printf("Contact Added Successfully!\n");
+}
+
+// Display Forward
+void displayForward() {
+    struct Contact* temp = head;
+    while (temp != NULL) {
+        printf("%s - %s\n", temp->name, temp->phone);
+        temp = temp->next;
+    }
+}
+
+// Display Backward
+void displayBackward() {
+    struct Contact* temp = tail;
+    while (temp != NULL) {
+        printf("%s - %s\n", temp->name, temp->phone);
+        temp = temp->prev;
+    }
+}
+
+// Search Contact (Partial Match)
+void searchContact() {
+    char key[50];
+    printf("Enter name to search: ");
+    scanf("%s", key);
+
+    struct Contact* temp = head;
+    int found = 0;
+
+    while (temp != NULL) {
+        if (strstr(temp->name, key) != NULL) {
+            printf("Found: %s - %s\n", temp->name, temp->phone);
+            found = 1;
+        }
+        temp = temp->next;
+    }
+
+    if (!found)
+        printf("Contact not found!\n");
+}
+
+// Delete Contact
+void deleteContact() {
+    char name[50];
+    printf("Enter name to delete: ");
+    scanf("%s", name);
+
+    struct Contact* temp = head;
+
+    while (temp != NULL) {
+        if (strcmp(temp->name, name) == 0) {
+
+            if (temp == head)
+                head = temp->next;
+
+            if (temp == tail)
+                tail = temp->prev;
+
+            if (temp->next != NULL)
+                temp->next->prev = temp->prev;
+
+            if (temp->prev != NULL)
+                temp->prev->next = temp->next;
+
+            free(temp);
+            printf("Deleted Successfully!\n");
+            return;
+        }
+        temp = temp->next;
+    }
+
+    printf("Contact not found!\n");
+}
+
+// Update Contact
+void updateContact() {
+    char name[50];
+    printf("Enter name to update: ");
+    scanf("%s", name);
+
+    struct Contact* temp = head;
+
+    while (temp != NULL) {
+        if (strcmp(temp->name, name) == 0) {
+            printf("Enter new phone: ");
+            scanf("%s", temp->phone);
+            printf("Updated Successfully!\n");
+            return;
+        }
+        temp = temp->next;
+    }
+
+    printf("Contact not found!\n");
+}
+
+// Main Menu
+int main() {
+    int choice;
+
+    while (1) {
+        printf("\n--- CONTACT MANAGER ---\n");
+        printf("1. Add Contact\n");
+        printf("2. Display Forward\n");
+        printf("3. Display Backward\n");
+        printf("4. Search Contact\n");
+        printf("5. Delete Contact\n");
+        printf("6. Update Contact\n");
+        printf("7. Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: addContact(); break;
+            case 2: displayForward(); break;
+            case 3: displayBackward(); break;
+            case 4: searchContact(); break;
+            case 5: deleteContact(); break;
+            case 6: updateContact(); break;
+            case 7: exit(0);
+            default: printf("Invalid Choice!\n");
+        }
+    }
+}
